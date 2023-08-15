@@ -27,16 +27,44 @@ body {
     padding: 10px;
     padding-top: 30px;
     min-height: 130px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    .prev-operand {
+    position: relative;
+    .dot {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 40px;
+      width: 100px;
+      z-index: 10;
+      padding-top: 3px;
+      padding-left: 3px;
+      #dot1,
+      #dot2,
+      #dot3 {
+        height: 15px;
+        width: 15px;
+        margin: 3px;
+        border-radius: 20px;
+        display: inline-block;
+      }
+      #dot1 {
+        background-color: red;
+      }
+      #dot2 {
+        background-color: yellow;
+      }
+      #dot3 {
+        background-color: green;
+      }
+    }
+    .user-input-display {
       font-size: 40px;
       word-break: break-all;
+      margin-left: auto;
+      text-align: right;
     }
-    .curr-operand {
+    .result-display {
+      text-align: right;
+      min-height: 40px;
       font-size: 30px;
       margin-top: 10px;
       word-break: break-all;
@@ -77,5 +105,13 @@ body {
         }
       }
     }
+  }
+}
+
+.show {
+  font-size: 20px;
+  padding-top: 20px;
+  * {
+    margin: 10px;
   }
 }

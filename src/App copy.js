@@ -26,9 +26,12 @@ export const OPERATIONS = {
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case ACTIONS.USER_INPUT:
-      if (payload.digit === '0' && state.currOperand === '0') return state;
-      if (payload.digit === '.' && state.currOperand.includes('.'))
+      if (
+        (payload.digit === '0' && state.currOperand === '0') ||
+        (payload.digit === '.' && state.currOperand.includes('.'))
+      )
         return state;
+
       if (state.prevOperand != null && state.currOperand == null) {
         console.log('state = ', state);
         return {

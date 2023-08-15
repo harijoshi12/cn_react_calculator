@@ -26,17 +26,45 @@ body {
   padding: 10px;
   padding-top: 30px;
   min-height: 130px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  flex-wrap: wrap;
+  position: relative;
 }
-.calc-container .output .prev-operand {
+.calc-container .output .dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 100px;
+  z-index: 10;
+  padding-top: 3px;
+  padding-left: 3px;
+}
+.calc-container .output .dot #dot1,
+.calc-container .output .dot #dot2,
+.calc-container .output .dot #dot3 {
+  height: 15px;
+  width: 15px;
+  margin: 3px;
+  border-radius: 20px;
+  display: inline-block;
+}
+.calc-container .output .dot #dot1 {
+  background-color: red;
+}
+.calc-container .output .dot #dot2 {
+  background-color: yellow;
+}
+.calc-container .output .dot #dot3 {
+  background-color: green;
+}
+.calc-container .output .user-input-display {
   font-size: 40px;
   word-break: break-all;
+  margin-left: auto;
+  text-align: right;
 }
-.calc-container .output .curr-operand {
+.calc-container .output .result-display {
+  text-align: right;
+  min-height: 40px;
   font-size: 30px;
   margin-top: 10px;
   word-break: break-all;
@@ -78,4 +106,12 @@ body {
 }
 .calc-container .calc-keyboard .row .op-btn:hover {
   background: hsl(40, 80%, 50%);
+}
+
+.show {
+  font-size: 20px;
+  padding-top: 20px;
+}
+.show * {
+  margin: 10px;
 }/*# sourceMappingURL=App.css.map */
