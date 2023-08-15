@@ -1,6 +1,81 @@
-.App {
-  text-align: center;
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  box-sizing: border-box;
 }
-.btn {
-  background-color: 'gray';
+
+body {
+  background: linear-gradient(to right, rgba(0, 0, 255, 0.1), rgba(255, 0, 0, 0.1));
+  display: flex;
+  justify-content: center;
 }
+
+.calc-container {
+  margin-top: 60px;
+  width: 360px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0px 12px 28px 0px rgba(140, 149, 159, 0.3);
+}
+.calc-container .output {
+  background-color: rgb(73, 59, 59);
+  color: white;
+  padding: 10px;
+  padding-top: 30px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.calc-container .output .prev-operand {
+  font-size: 40px;
+  word-break: break-all;
+}
+.calc-container .output .curr-operand {
+  font-size: 30px;
+  margin-top: 10px;
+  word-break: break-all;
+  color: rgb(214, 214, 214);
+}
+.calc-container .calc-keyboard .row {
+  display: flex;
+  flex-direction: row;
+}
+.calc-container .calc-keyboard .row .digit-btn,
+.calc-container .calc-keyboard .row .digit-span2-btn,
+.calc-container .calc-keyboard .row .op-btn {
+  width: 90px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-right: 2px solid rgba(0, 0, 0, 0.1);
+  font-size: 40px;
+  font-weight: bold;
+  background-color: rgb(243, 243, 243);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.calc-container .calc-keyboard .row .digit-btn:hover,
+.calc-container .calc-keyboard .row .digit-span2-btn:hover,
+.calc-container .calc-keyboard .row .op-btn:hover {
+  cursor: pointer;
+  background-color: hsl(0, 0%, 80%);
+}
+.calc-container .calc-keyboard .row .digit-span2-btn {
+  width: 180px;
+}
+.calc-container .calc-keyboard .row .op-btn {
+  background: rgb(255, 187, 0);
+  color: white;
+}
+.calc-container .calc-keyboard .row .op-btn:hover {
+  background: hsl(40, 80%, 50%);
+}/*# sourceMappingURL=App.css.map */
