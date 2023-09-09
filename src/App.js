@@ -139,7 +139,9 @@ const getResult = ({ userInput }) => {
     .replace(/÷/g, '/')
     .replace(/−/g, '-');
   try {
-    return eval(expression);
+    let rawResult = eval(expression);
+    let formattedResult = parseFloat(rawResult.toFixed(3)).toLocaleString();
+    return formattedResult;
   } catch (e) {
     return 'Error';
   }
