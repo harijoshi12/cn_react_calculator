@@ -95,6 +95,39 @@ const reducer = (state, { type, payload }) => {
         userInput: newUserInput,
         result: newResult,
       };
+
+    case ACTIONS.GET_RESULT:
+      let evaluatedResult = null;
+      let finalUserInput = state.userInput;
+
+      if (state.userInput) {
+        const lastChar = state.userInput.slice(-1);
+        const operationCount = Array.from(state.userInput).filter((char) =>
+          Object.values(OPERATIONS).includes(char)
+        ).length;
+
+        // Do nothing if there's only one operation and it's the last character, or if there are no operations
+        if (
+          (operationCount === 1 &&
+            Object.values(OPERATIONS).includes(lastChar)) ||
+          operationCount === 0
+        ) {
+          return state;
+        }
+
+        // Remove the last character if it's an operation
+        if (Object.values(OPERATIONS).includes(lastChar)) {
+          finalUserInput = state.userInput.slice(0, -1);
+        }
+
+        evaluatedResult = getResult({ userInput: finalUserInput });
+      }
+
+      return {
+        ...state,
+        userInput: evaluatedResult !== null ? String(evaluatedResult) : '',
+        result: null,
+      };
     default:
       return state;
   }

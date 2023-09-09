@@ -6,7 +6,7 @@ function OperationBtn({ operation, dispatch, span }) {
     if (operation === 'C') {
       dispatch({ type: ACTIONS.CLEAR });
     } else if (operation === '=') {
-      return;
+      dispatch({ type: ACTIONS.GET_RESULT });
     } else if (operation === '⌫') {
       dispatch({ type: ACTIONS.DELETE_DIGIT });
     } else {
