@@ -8,10 +8,8 @@ export const ACTIONS = {
   USER_INPUT: 'user-inpupt',
   CLEAR: 'clear',
   CHOOSE_OPERATION: 'choose-operation',
-
-  // GET_RESULT: 'get-result',
-  // ADD_DIGIT: 'remove-digit',
-  // DELETE_DIGIT: 'delete-digit',
+  DELETE_DIGIT: 'delete-digit',
+  GET_RESULT: 'get-result',
 };
 export const OPERATIONS = {
   ADD: '+',
@@ -26,69 +24,76 @@ export const OPERATIONS = {
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case ACTIONS.USER_INPUT:
-      if (payload.digit === '0' && state.currOperand === '0') return state;
-      if (payload.digit === '.' && state.currOperand.includes('.'))
+      if (payload.digit === '0' && state.userInput === '0') {
         return state;
-      if (state.prevOperand != null && state.currOperand == null) {
-        console.log('state = ', state);
-        return {
-          ...state,
-          userInput: (state?.userInput || '') + payload.digit,
-          currOperand: payload.digit,
-
-          result: getResult({
-            ...state,
-            userInput: (state?.userInput || '') + payload.digit,
-            currOperand: payload.digit,
-          }),
-        };
       }
-      if (state.prevOperand != null && state.currOperand != null) {
-        console.log('state = ', state);
-        return {
-          ...state,
-          userInput: (state?.userInput || '') + payload.digit,
-          currOperand: (state?.currOperand || '') + payload?.digit,
-          result: getResult({
-            ...state,
-            userInput: (state?.userInput || '') + payload.digit,
-            currOperand: (state?.currOperand || '') + payload?.digit,
-          }),
-        };
+      if (payload.digit === '.' && state.userInput.includes('.')) {
+        return state;
       }
+      const updatedUserInput = (state?.userInput || '') + payload.digit;
       return {
         ...state,
-        userInput: (state?.userInput || '') + payload.digit,
-        currOperand: (state?.currOperand || '') + payload?.digit,
+        userInput: updatedUserInput,
+        result: state.operation
+          ? getResult({ userInput: updatedUserInput })
+          : null,
       };
 
     case ACTIONS.CLEAR:
       return {};
 
     case ACTIONS.CHOOSE_OPERATION:
-      if (state.currOperand == null && state.prevOperand == null) return state;
-      if (state.prevOperand == null) {
+      if (!state.userInput) return state;
+      const lastChar = state.userInput.slice(-1);
+      if (Object.values(OPERATIONS).includes(lastChar)) {
+        // If the last character is already an operation
+        if (lastChar === payload.operation) {
+          // If the last operation is the same as the new one, do nothing
+          return state;
+        } else {
+          // If the last operation is different, replace it with the new one
+          const newUserInput = state.userInput.slice(0, -1) + payload.operation;
+          return {
+            ...state,
+            userInput: newUserInput,
+            operation: payload.operation,
+          };
+        }
+      } else {
+        // If the last character is not an operation, add the new operation
         return {
           ...state,
           userInput: state.userInput + payload.operation,
           operation: payload.operation,
-          prevOperand: state.currOperand,
-          currOperand: null,
         };
       }
-      if (state.currOperand == null) {
-        return {
-          ...state,
-          userInput: state.userInput.slice(0, -1) + payload.operation,
-          operation: payload.operation,
-        };
+
+    case ACTIONS.DELETE_DIGIT:
+      const newUserInput = state.userInput.slice(0, -1);
+      let newResult = state.result;
+      // Check if the userInput contains only one operation
+      const operationCount = Array.from(newUserInput).filter((char) =>
+        Object.values(OPERATIONS).includes(char)
+      ).length;
+      if (
+        operationCount === 1 &&
+        Object.values(OPERATIONS).includes(newUserInput.slice(-1))
+      ) {
+        newResult = null;
+      } else if (operationCount === 0 || newUserInput.length === 0) {
+        newResult = null;
+      } else {
+        const lastChar = newUserInput.slice(-1);
+        if (!Object.values(OPERATIONS).includes(lastChar)) {
+          newResult = getResult({ userInput: newUserInput });
+        } else {
+          newResult = getResult({ userInput: newUserInput.slice(0, -1) });
+        }
       }
       return {
         ...state,
-        userInput: state.userInput + payload.operation,
-        prevOperand: state.result,
-        currOperand: null,
-        operation: payload.operation,
+        userInput: newUserInput,
+        result: newResult,
       };
     default:
       return state;
@@ -100,7 +105,11 @@ const getResult = ({ userInput }) => {
     ?.replace(/×/g, '*')
     .replace(/÷/g, '/')
     .replace(/−/g, '-');
-  return eval(expression);
+  try {
+    return eval(expression);
+  } catch (e) {
+    return 'Error';
+  }
 };
 
 function App() {

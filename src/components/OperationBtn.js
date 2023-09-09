@@ -5,8 +5,11 @@ function OperationBtn({ operation, dispatch, span }) {
   const handleClick = () => {
     if (operation === 'C') {
       dispatch({ type: ACTIONS.CLEAR });
-    } else if (operation === '=' || operation === '⌫') return;
-    else {
+    } else if (operation === '=') {
+      return;
+    } else if (operation === '⌫') {
+      dispatch({ type: ACTIONS.DELETE_DIGIT });
+    } else {
       dispatch({ type: ACTIONS.CHOOSE_OPERATION, payload: { operation } });
     }
   };
