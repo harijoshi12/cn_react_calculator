@@ -34,6 +34,7 @@ This is a simple calculator app built with React. It performs basic arithmetic o
 A video demonstration explaining the code and showcasing the final product is available [here](#).
 
 ## Demo
+https://cn-calculator-app.netlify.app/
 
 ## Author
 [Hari Joshi](https://github.com/harijoshi12)
