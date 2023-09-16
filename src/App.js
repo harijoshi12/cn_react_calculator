@@ -1,9 +1,11 @@
+// Importing required modules and components
 import { useReducer } from 'react';
 import './App.css';
 import DigitBtn from './components/DigitBtn';
 import OperationBtn from './components/OperationBtn';
 import OutputDisplay from './components/OutputDisplay';
 
+// Action types for the reducer
 export const ACTIONS = {
   USER_INPUT: 'user-inpupt',
   CLEAR: 'clear',
@@ -11,6 +13,8 @@ export const ACTIONS = {
   DELETE_DIGIT: 'delete-digit',
   GET_RESULT: 'get-result',
 };
+
+// Operation symbols
 export const OPERATIONS = {
   ADD: '+',
   SUBTRACT: '−',
@@ -21,15 +25,19 @@ export const OPERATIONS = {
   EQUAL: '=',
 };
 
+// Reducer function to handle state changes
 const reducer = (state, { type, payload }) => {
   switch (type) {
+    // Handle digit input
     case ACTIONS.USER_INPUT:
+      // Prevent leading zeros and multiple dots
       if (payload.digit === '0' && state.userInput === '0') {
         return state;
       }
       if (payload.digit === '.' && state.userInput.includes('.')) {
         return state;
       }
+      // Update the user input and calculate the result
       const updatedUserInput = (state?.userInput || '') + payload.digit;
       return {
         ...state,
@@ -38,12 +46,15 @@ const reducer = (state, { type, payload }) => {
           ? getResult({ userInput: updatedUserInput })
           : null,
       };
-
+    // Clear the state
     case ACTIONS.CLEAR:
       return {};
 
+    // Handle operation input
     case ACTIONS.CHOOSE_OPERATION:
+      // Skip if no user input
       if (!state.userInput) return state;
+      // Logic to handle operation replacement or addition
       const lastChar = state.userInput.slice(-1);
       if (Object.values(OPERATIONS).includes(lastChar)) {
         // If the last character is already an operation
@@ -68,6 +79,7 @@ const reducer = (state, { type, payload }) => {
         };
       }
 
+    // Handle digit deletion
     case ACTIONS.DELETE_DIGIT:
       const newUserInput = state.userInput.slice(0, -1);
       let newResult = state.result;
@@ -96,6 +108,7 @@ const reducer = (state, { type, payload }) => {
         result: newResult,
       };
 
+    // Handle result calculation
     case ACTIONS.GET_RESULT:
       let evaluatedResult = null;
       let finalUserInput = state.userInput;
@@ -133,12 +146,15 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
+// Function to evaluate the expression and format the result
 const getResult = ({ userInput }) => {
+  // Replace operation symbols with their JavaScript equivalents
   let expression = userInput
     ?.replace(/×/g, '*')
     .replace(/÷/g, '/')
     .replace(/−/g, '-');
   try {
+    // Evaluate the expression and format the result
     let rawResult = eval(expression);
     let formattedResult = parseFloat(rawResult.toFixed(3)).toLocaleString();
     return formattedResult;
@@ -147,20 +163,16 @@ const getResult = ({ userInput }) => {
   }
 };
 
+// Main App component
 function App() {
-  const [{ userInput, result, currOperand, prevOperand, operation }, dispatch] =
-    useReducer(reducer, {});
+  // Initialize state and reducer
+  const [{ userInput, result, operation }, dispatch] = useReducer(reducer, {});
 
+  // Render the calculator UI
   return (
     <>
       <div className="calc-container">
-        <OutputDisplay
-          // currOperand={currOperand}
-          // prevOperand={prevOperand}
-          // operation={operation}
-          userInput={userInput}
-          result={result}
-        />
+        <OutputDisplay userInput={userInput} result={result} />
         <div className="calc-keyboard">
           <div className="row">
             <OperationBtn
@@ -195,13 +207,6 @@ function App() {
             <OperationBtn dispatch={dispatch} operation={OPERATIONS.EQUAL} />
           </div>
         </div>
-      </div>
-      <div className="show">
-        <div className="">prev operand : {prevOperand}</div>
-        <div className="">curr operand : {currOperand}</div>
-        <div className="">operation : {operation}</div>
-        <div className="">user input : {userInput}</div>
-        <div className="">result : {result}</div>
       </div>
     </>
   );
