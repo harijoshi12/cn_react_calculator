@@ -166,7 +166,13 @@ const getResult = ({ userInput }) => {
 // Main App component
 function App() {
   // Initialize state and reducer
-  const [{ userInput, result, operation }, dispatch] = useReducer(reducer, {});
+  const initialState = {
+    userInput: '',
+    result: null,
+    operation: null,
+  };
+
+  const [{ userInput, result }, dispatch] = useReducer(reducer, initialState);
 
   // Render the calculator UI
   return (
